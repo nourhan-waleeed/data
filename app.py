@@ -4,7 +4,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output  # Import the necessary classes
 import plotly.express as px
-import plotly.graph_objects as go  # Import go from plotly.graph_objects
+#import plotly.graph_objects as go  # Import go from plotly.graph_objects
 import dash_table
 
 category = pd.read_csv('https://drive.google.com/uc?export=download&id=1hDkvMLW32NPlt3GlbpyfkrSSp3g9tSNd')
