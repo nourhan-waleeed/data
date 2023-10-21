@@ -9,14 +9,14 @@ import plotly.express as px
 import dash_table
 
 category = pd.read_csv('https://drive.google.com/uc?export=download&id=1hDkvMLW32NPlt3GlbpyfkrSSp3g9tSNd')
-dash = pd.read_csv('https://drive.google.com/uc?export=download&id=1y7Zu4IJaNKXn7mAuQqWfj2qPaHSRS4KO')
+dashboard = pd.read_csv('https://drive.google.com/uc?export=download&id=1y7Zu4IJaNKXn7mAuQqWfj2qPaHSRS4KO')
 complaints_big = pd.read_csv('https://drive.google.com/uc?export=download&id=1NK52hyFiS9JbiRrgxZd4Mn1gA-87PiBB')
 #complaints = pd.read_csv('elrehab_final_complaint.csv')
 
-dash.drop(columns=['Unnamed: 0'],inplace= True)
+#dash.drop(columns=['Unnamed: 0'],inplace= True)
 #complaints.drop(columns=['Unnamed: 0'],inplace= True)
-complaints_big.drop(columns=['Unnamed: 0'],inplace= True)
-category.drop(columns=['Unnamed: 0'],inplace= True)
+#complaints_big.drop(columns=['Unnamed: 0'],inplace= True)
+#category.drop(columns=['Unnamed: 0'],inplace= True)
 
 category['duration'] = category['tenure']- category['recency_in_days']
 
@@ -27,9 +27,9 @@ seg = category.groupby('segments').size().reset_index(name='count')
 
 sales = category.groupby(['الشهر ','القسم السلعي'])['المشتريات'].sum().reset_index()
 
-daily_payments = dash.groupby('اسم اليوم')['قيمه المشتريات'].sum().reset_index()
-monthly_payments = dash.groupby('الشهر')['قيمه المشتريات'].sum().reset_index()
-seasonality_payments = dash.groupby('فصول')['قيمه المشتريات'].sum().reset_index()
+daily_payments = dashboard.groupby('اسم اليوم')['قيمه المشتريات'].sum().reset_index()
+monthly_payments = dashboard.groupby('الشهر')['قيمه المشتريات'].sum().reset_index()
+seasonality_payments = dashboard.groupby('فصول')['قيمه المشتريات'].sum().reset_index()
 
 unique_segments = category.groupby("رقم العميل")["segments"].unique().reset_index()
 segment_counts = unique_segments['segments'].value_counts().reset_index()
@@ -235,7 +235,7 @@ def update_graph(chosen_option):
     elif chosen_option == 'freq':
 
         figure = px.histogram(
-            dash,
+            dashboard,
             x='عدد الزيارات',
             title='Box Plot of Frequency of Visits',
             color_discrete_sequence=px.colors.sequential.Viridis)
