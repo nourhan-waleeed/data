@@ -52,6 +52,8 @@ category_merge=pd.merge(category_sum, category_count, on='القسم السلع�
 
 
 app = dash.Dash(__name__)
+server = app.server
+
 
 app.layout = html.Div(style={'font-family': 'Arial, sans-serif', 'padding': '20px', 'background-color': '', 'text-align': 'right','color':'purple','font-size':'20px'}, children=[
     html.H1(children='فتح الله فرع الرحاب', style={'color': '#333', 'font-weight': 'bold','text-align': 'center','color':'purple','font-size':'50px'}),
