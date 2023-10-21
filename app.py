@@ -105,7 +105,7 @@ app.layout = html.Div(style={'font-family': 'Arial, sans-serif', 'padding': '20p
     
        dcc.Graph(figure = px.pie(
             segment_counts,
-            values='count', names='Segment',
+            values='Count', names='Segment',
             color_discrete_sequence=px.colors.sequential.Viridis).
             update_layout(title='تصنيف العملاء'))
             ], style={'display': 'flex', 'flex-direction': 'row'}),
