@@ -9,8 +9,10 @@ import dash_table
 
 category = pd.read_csv('elrehab_cat_dashboard.csv')
 dash = pd.read_csv('elrehab_dash1.csv')
-complaints_big = pd.read_csv('elrehab_complaint_cleaned2.csv')
+complaints_big = pd.read_csv('https://drive.google.com/uc?export=download&id=1NK52hyFiS9JbiRrgxZd4Mn1gA-87PiBB')
 complaints = pd.read_csv('elrehab_final_complaint.csv')
+https://drive.google.com/uc?export=download&id=1NK52hyFiS9JbiRrgxZd4Mn1gA-87PiBB
+
 
 dash.drop(columns=['Unnamed: 0'],inplace= True)
 complaints.drop(columns=['Unnamed: 0'],inplace= True)
