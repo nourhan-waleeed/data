@@ -7,15 +7,13 @@ import plotly.express as px
 import plotly.graph_objects as go  # Import go from plotly.graph_objects
 import dash_table
 
-category = pd.read_csv('elrehab_cat_dashboard.csv')
-dash = pd.read_csv('elrehab_dash1.csv')
+category = pd.read_csv('https://drive.google.com/uc?export=download&id=1hDkvMLW32NPlt3GlbpyfkrSSp3g9tSNd')
+dash = pd.read_csv('https://drive.google.com/uc?export=download&id=1y7Zu4IJaNKXn7mAuQqWfj2qPaHSRS4KO')
 complaints_big = pd.read_csv('https://drive.google.com/uc?export=download&id=1NK52hyFiS9JbiRrgxZd4Mn1gA-87PiBB')
-complaints = pd.read_csv('elrehab_final_complaint.csv')
-https://drive.google.com/uc?export=download&id=1NK52hyFiS9JbiRrgxZd4Mn1gA-87PiBB
-
+#complaints = pd.read_csv('elrehab_final_complaint.csv')
 
 dash.drop(columns=['Unnamed: 0'],inplace= True)
-complaints.drop(columns=['Unnamed: 0'],inplace= True)
+#complaints.drop(columns=['Unnamed: 0'],inplace= True)
 complaints_big.drop(columns=['Unnamed: 0'],inplace= True)
 category.drop(columns=['Unnamed: 0'],inplace= True)
 
