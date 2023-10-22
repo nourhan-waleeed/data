@@ -33,7 +33,7 @@ seasonality_payments = dashboard.groupby('فصول')['قيمه المشتريا�
 
 unique_segments = category.groupby("رقم العميل")["segments"].unique().reset_index()
 segment_counts = unique_segments['segments'].value_counts().reset_index()
-segment_counts = segment_counts.rename(columns={'segments': 'Segment', 'index': 'Count'})
+segment_counts = segment_counts.rename(columns={'segments': 'Segment', 'index': 'count'})
 
 category_dropdown_options = [{'label': category, 'value': category} for category in category['القسم السلعي'].unique()]
 segments_dropdown_options = [{'label': segment, 'value': segment} for segment in seg['segments'].unique()]
@@ -105,7 +105,7 @@ app.layout = html.Div(style={'font-family': 'Arial, sans-serif', 'padding': '20p
     
        dcc.Graph(figure = px.pie(
             segment_counts,
-            values='Count', names='Segment',
+            values='count', names='Segment',
             color_discrete_sequence=px.colors.sequential.Viridis).
             update_layout(title='تصنيف العملاء'))
             ], style={'display': 'flex', 'flex-direction': 'row'}),
