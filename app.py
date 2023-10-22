@@ -9,11 +9,11 @@ import plotly.express as px
 import dash_table
 
 category = pd.read_csv('https://drive.google.com/uc?export=download&id=1hDkvMLW32NPlt3GlbpyfkrSSp3g9tSNd')
-dashboard = pd.read_csv('https://drive.google.com/uc?export=download&id=1y7Zu4IJaNKXn7mAuQqWfj2qPaHSRS4KO')
-#complaints_big = pd.read_csv('https://drive.google.com/uc?export=download&id=1NK52hyFiS9JbiRrgxZd4Mn1gA-87PiBB')
+#dashboard = pd.read_csv('https://drive.google.com/uc?export=download&id=1y7Zu4IJaNKXn7mAuQqWfj2qPaHSRS4KO')
+complaints_big = pd.read_csv('https://drive.google.com/uc?export=download&id=1NK52hyFiS9JbiRrgxZd4Mn1gA-87PiBB')
 #complaints = pd.read_csv('elrehab_final_complaint.csv')
 
-#dash.drop(columns=['Unnamed: 0'],inplace= True)
+#dashboard.drop(columns=['Unnamed: 0'],inplace= True)
 #complaints.drop(columns=['Unnamed: 0'],inplace= True)
 #complaints_big.drop(columns=['Unnamed: 0'],inplace= True)
 #category.drop(columns=['Unnamed: 0'],inplace= True)
@@ -22,14 +22,14 @@ category['duration'] = category['tenure']- category['recency_in_days']
 
 one_visit_data = category[category['segments'] == 'One Visit']
 monthly_purchases = one_visit_data.groupby('الشهر ')['segments'].count().reset_index()
-#dep = complaints_big.groupby(['Department','reason']).size().reset_index(name='count')
+dep = complaints_big.groupby(['Department','reason']).size().reset_index(name='count')
 seg = category.groupby('segments').size().reset_index(name='count')
 
 sales = category.groupby(['الشهر ','القسم السلعي'])['المشتريات'].sum().reset_index()
 
-daily_payments = dashboard.groupby('اسم اليوم')['قيمه المشتريات'].sum().reset_index()
-monthly_payments = dashboard.groupby('الشهر')['قيمه المشتريات'].sum().reset_index()
-seasonality_payments = dashboard.groupby('فصول')['قيمه المشتريات'].sum().reset_index()
+#daily_payments = dashboard.groupby('اسم اليوم')['قيمه المشتريات'].sum().reset_index()
+#monthly_payments = dashboard.groupby('الشهر')['قيمه المشتريات'].sum().reset_index()
+#seasonality_payments = dashboard.groupby('فصول')['قيمه المشتريات'].sum().reset_index()
 
 unique_segments = category.groupby("رقم العميل")["segments"].unique().reset_index()
 segment_counts = unique_segments['segments'].value_counts().reset_index()
@@ -37,7 +37,7 @@ segment_counts = segment_counts.rename(columns={'segments': 'Segment', 'index': 
 
 category_dropdown_options = [{'label': category, 'value': category} for category in category['القسم السلعي'].unique()]
 segments_dropdown_options = [{'label': segment, 'value': segment} for segment in seg['segments'].unique()]
-#comp_dropdown_options = [{'label': department, 'value': department} for department in dep['Department'].unique()]
+comp_dropdown_options = [{'label': department, 'value': department} for department in dep['Department'].unique()]
 
 merged_other = category[category['segments'].isin(['Champion', 'Need Attention','One Visit'])]
 merged_loyal = category[category['segments']=='Loyal']
@@ -105,7 +105,7 @@ app.layout = html.Div(style={'font-family': 'Arial, sans-serif', 'padding': '20p
     
        dcc.Graph(figure = px.pie(
             segment_counts,
-            values='count', names='Segment',
+            values='Count', names='Segment',
             color_discrete_sequence=px.colors.sequential.Viridis).
             update_layout(title='تصنيف العملاء'))
             ], style={'display': 'flex', 'flex-direction': 'row'}),
@@ -183,61 +183,26 @@ app.layout = html.Div(style={'font-family': 'Arial, sans-serif', 'padding': '20p
             html.H1(children='شكاوي فرع الرحاب', style={'color': '#333', 'font-weight': 'bold','text-align': 'center','color':'purple','font-size':'30px'}),       
     ]),
     
-
+    
+            html.Div([
+            dcc.Dropdown(
+        id='comp-dropdown',
+        options=comp_dropdown_options,
+        multi=True,  # Allow for selecting multiple segments
+        value=dep['Department'].unique(),  # Default to all segments
+        placeholder="Select department(s)"
+    ),
+            
+        dcc.Graph(id='comp-plot'),
+  
+            
+        ])
     
     
 
 ])
 
-@app.callback(
-    Output(component_id='controls-and-graph', component_property='figure'),
-    Input(component_id='controls-and-radio-item', component_property='value')
-)
-def update_graph(chosen_option):
-    if chosen_option == 'season':
-        figure = px.bar(
-            seasonality_payments,
-            x='فصول',
-            y='قيمه المشتريات',
-            title='المبيعات على مدار فصول السنة'
-            ,color_discrete_sequence=px.colors.sequential.Viridis
-        )
-    elif chosen_option == 'days':
-        figure = px.bar(
-            daily_payments,
-            x='اسم اليوم',
-            y='قيمه المشتريات',
-            title='المبيعات على مدار الاسبوع'
-            ,color_discrete_sequence=px.colors.sequential.Viridis
-        )
-    elif chosen_option == 'month':
-        figure = px.line(
-            monthly_payments,
-            x='الشهر',
-            y='قيمه المشتريات',
-            title='المبيعات على مدار الشهر',
-            color_discrete_sequence=px.colors.sequential.Viridis)
-           #figure.update_layout(barmode='group', bargap=0.2)
-            
-    elif chosen_option == 'freq':
 
-        figure = px.histogram(
-            dashboard,
-            x='عدد الزيارات',
-            title='Box Plot of Frequency of Visits',
-            color_discrete_sequence=px.colors.sequential.Viridis)
-
-
-    elif chosen_option == 'معدل':
-
-        figure = px.box(
-            category,
-            x='معدل الشراء',
-            title='Box Plot of Frequency of Visits',
-            color_discrete_sequence=px.colors.sequential.Viridis)
-        
-
-    return figure
 
 
 
@@ -277,6 +242,36 @@ def update_segment_table(selected_segments):
 
 
 
+@app.callback(
+    Output('comp-plot', 'figure'),
+    Input('comp-dropdown', 'value')
+)
+
+
+
+def update_comp_plot(selected_comp):
+    if selected_comp:
+        filtered_data = dep[dep['Department'].isin(selected_comp)]
+        
+        fig = px.bar(
+            filtered_data,
+            x='reason',  
+            y='count',
+            title='Number of Customers by Subcategory',
+            color_discrete_sequence=px.colors.sequential.Viridis
+        )
+        
+        return fig
+    return {}
+
+
+
+    
+    
+    
+    
+    
+    
     
     
 @app.callback(
@@ -286,7 +281,7 @@ def update_segment_table(selected_segments):
 
 
 
-def update_cat_plot(selected_cat):
+def update_comp_plot(selected_cat):
     if selected_cat:
         
         other_counts = merged_other.groupby(['segments', 'القسم السلعي']).size().reset_index(name='count')
@@ -337,4 +332,4 @@ def update_cat_plot(selected_cat):
  
 
 if __name__ == '__main__':
-    app.run_server(debug=True, port=8800)
+    app.run_server(debug=True , port=8888)
